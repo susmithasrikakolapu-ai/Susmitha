@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beauty Parlour Dashboard</title>
+  <style>
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      color: #333;
+      background: #f8f9fb;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: #6a1b9a;
+      color: #fff;
+      padding: 20px;
+    }
+    .sidebar h2 {
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      margin: 15px 0;
+      cursor: pointer;
+    }
+    .sidebar ul li:hover {
+      text-decoration: underline;
+    }
+
+    /* Main content */
+    .main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: #6a1b9a;
+    }
+
+    /* Cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+      font-size: 18px;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* Form */
+    .form-section {
+      margin-top: 30px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .form-section h2 {
+      margin-bottom: 15px;
+      font-size: 20px;
+      color: #6a1b9a;
+    }
+
+    .form-section form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-section input, .form-section select, .form-section button {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .form-section button {
+      background: #6a1b9a;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    .form-section button:hover {
+      background: #501373;
+    }
+
+    /* Appointment list */
+    .appointments {
+      margin-top: 20px;
+    }
+
+    .appointments h3 {
+      margin-bottom: 10px;
+    }
+
+    .appointments ul {
+      list-style: none;
+    }
+
+    .appointments ul li {
+      background: #f1f1f1;
+      margin-bottom: 8px;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>Beauty Parlour</h2>
+    <ul>
+      <li onclick="showSection('dashboard')">Dashboard</li>
+      <li onclick="showSection('services')">Services</li>
+      <li onclick="showSection('appointments')">Appointments</li>
+    </ul>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main">
+
+    <!-- Header -->
+    <div class="header">
+      <h1 id="sectionTitle">Dashboard</h1>
+      <span id="date"></span>
+    </div>
+
+    <!-- Sections -->
+    <div id="dashboardSection">
+      <div class="cards">
+        <div class="card">
+          <h3>Total Customers</h3>
+          <p>120</p>
+        </div>
+        <div class="card">
+          <h3>Appointments Today</h3>
+          <p>15</p>
+        </div>
+        <div class="card">
+          <h3>Services Offered</h3>
+          <p>10</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="servicesSection" style="display:none;">
+      <div class="cards">
+        <div class="card">
+          <h3>Facial</h3>
+          <p>Price: ₹800</p>
+        </div>
+        <div class="card">
+          <h3>Haircut</h3>
+          <p>Price: ₹300</p>
+        </div>
+        <div class="card">
+          <h3>Manicure</h3>
+          <p>Price: ₹500</p>
+        </div>
+        <div class="card">
+          <h3>Pedicure</h3>
+          <p>Price: ₹600</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="appointmentsSection" style="display:none;">
+      <div class="form-section">
+        <h2>Book an Appointment</h2>
+        <form id="appointmentForm">
+          <input type="text" id="custName" placeholder="Customer Name" required />
+          <select id="serviceSelect" required>
+            <option value="">Select Service</option>
+            <option>Facial</option>
+            <option>Haircut</option>
+            <option>Manicure</option>
+            <option>Pedicure</option>
+          </select>
+          <input type="date" id="dateSelect" required />
+          <button type="submit">Book Now</button>
+        </form>
+      </div>
+
+      <div class="appointments">
+        <h3>Upcoming Appointments</h3>
+        <ul id="appointmentList">
+          <li>No appointments yet.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Show date
+    document.getElementById("date").textContent = new Date().toDateString();
+
+    // Section toggler
+    function showSection(section) {
+      document.getElementById("sectionTitle").textContent = section.charAt(0).toUpperCase() + section.slice(1);
+      document.getElementById("dashboardSection").style.display = section === 'dashboard' ? 'block' : 'none';
+      document.getElementById("servicesSection").style.display = section === 'services' ? 'block' : 'none';
+      document.getElementById("appointmentsSection").style.display = section === 'appointments' ? 'block' : 'none';
+    }
+
+    // Appointment booking
+    const form = document.getElementById("appointmentForm");
+    const list = document.getElementById("appointmentList");
+
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = document.getElementById("custName").value;
+      const service = document.getElementById("serviceSelect").value;
+      const date = document.getElementById("dateSelect").value;
+
+      const li = document.createElement("li");
+      li.textContent = `${name} booked ${service} on ${date}`;
+      
+      if (list.children[0].textContent === "No appointments yet.") {
+        list.innerHTML = "";
+      }
+      list.appendChild(li);
+      form.reset();
+    });
+  </script>
+</body>
+</html>
